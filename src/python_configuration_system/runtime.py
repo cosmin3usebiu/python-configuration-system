@@ -10,11 +10,13 @@ from collections.abc import Iterator
 from dataclasses import dataclass, field
 from types import MappingProxyType
 
-from python_configuration_system.types import ConfigMapping
-from python_configuration_system.types import ConfigValue
-from python_configuration_system.types import FieldName
-from python_configuration_system.types import ProfileName
-from python_configuration_system.types import SourceName
+from python_configuration_system.types import (
+    ConfigMapping,
+    ConfigValue,
+    FieldName,
+    ProfileName,
+    SourceName,
+)
 from python_configuration_system.validate import ValidationReport
 
 

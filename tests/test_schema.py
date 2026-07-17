@@ -4,16 +4,17 @@ from pathlib import Path
 
 import pytest
 
-from python_configuration_system import BooleanField
-from python_configuration_system import ConfigSchema
-from python_configuration_system import IntegerField
-from python_configuration_system import PathField
-from python_configuration_system import SchemaDefinitionError
-from python_configuration_system import SecretField
-from python_configuration_system import StringField
-from python_configuration_system import UNSET
-from python_configuration_system.paths import PathKind
-from python_configuration_system.paths import PathRules
+from python_configuration_system import (
+    UNSET,
+    BooleanField,
+    ConfigSchema,
+    IntegerField,
+    PathField,
+    SchemaDefinitionError,
+    SecretField,
+    StringField,
+)
+from python_configuration_system.paths import PathKind, PathRules
 
 
 def test_string_field_defaults_to_required_without_default() -> None:

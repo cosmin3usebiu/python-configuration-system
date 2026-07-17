@@ -1,9 +1,6 @@
 """Configuration source interfaces and implementations."""
 
-from python_configuration_system.sources import base
-from python_configuration_system.sources import env
-from python_configuration_system.sources import file
-from python_configuration_system.sources import registry
+from python_configuration_system.sources import base, env, file, registry
 
 ConfigSource = base.ConfigSource
 SourceDiscovery = base.SourceDiscovery

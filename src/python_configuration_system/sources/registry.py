@@ -10,11 +10,12 @@ from dataclasses import dataclass, field
 from typing import Sequence
 
 from python_configuration_system.errors import SourceRegistrationError
-from python_configuration_system.sources.base import ConfigSource
-from python_configuration_system.sources.base import SourceDiscovery
-from python_configuration_system.sources.base import SourcePayload
-from python_configuration_system.types import ProfileName
-from python_configuration_system.types import SourceName
+from python_configuration_system.sources.base import (
+    ConfigSource,
+    SourceDiscovery,
+    SourcePayload,
+)
+from python_configuration_system.types import ProfileName, SourceName
 
 
 @dataclass(slots=True, frozen=True)
@@ -50,7 +51,8 @@ class SourceRegistry:
         for source in normalized_sources:
             if source.source_name in source_names:
                 raise SourceRegistrationError(
-                    f"Configuration source '{source.source_name}' is already registered."
+                    f"Configuration source '{source.source_name}' is already "
+                    "registered."
                 )
             source_names.add(source.source_name)
 

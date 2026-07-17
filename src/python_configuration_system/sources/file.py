@@ -8,12 +8,13 @@ from pathlib import Path
 from typing import Any
 
 from python_configuration_system.errors import SourceLoadError
-from python_configuration_system.sources.base import ConfigSource
-from python_configuration_system.sources.base import SourceDiscovery
-from python_configuration_system.sources.base import SourceMetadata
-from python_configuration_system.sources.base import SourcePayload
-from python_configuration_system.types import ProfileName
-from python_configuration_system.types import SourceName
+from python_configuration_system.sources.base import (
+    ConfigSource,
+    SourceDiscovery,
+    SourceMetadata,
+    SourcePayload,
+)
+from python_configuration_system.types import ProfileName, SourceName
 
 
 @dataclass(slots=True, frozen=True)
@@ -102,7 +103,8 @@ class FileConfigSource(ConfigSource):
 
         if file_path.suffix.lower() != ".json":
             raise SourceLoadError(
-                f"Configuration file source '{self.source_name}' only supports JSON files."
+                f"Configuration file source '{self.source_name}' only supports "
+                "JSON files."
             )
 
         if not file_path.exists():

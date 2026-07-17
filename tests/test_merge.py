@@ -7,11 +7,13 @@ from types import MappingProxyType
 import pytest
 
 from python_configuration_system.errors import MergeConflictError
-from python_configuration_system.merge import ConfigMerger
-from python_configuration_system.merge import LastSourceWinsMergeStrategy
-from python_configuration_system.merge import MergeInput
-from python_configuration_system.merge import MergeResult
-from python_configuration_system.merge import StrictConflictMergeStrategy
+from python_configuration_system.merge import (
+    ConfigMerger,
+    LastSourceWinsMergeStrategy,
+    MergeInput,
+    MergeResult,
+    StrictConflictMergeStrategy,
+)
 from python_configuration_system.sources.base import SourcePayload
 
 

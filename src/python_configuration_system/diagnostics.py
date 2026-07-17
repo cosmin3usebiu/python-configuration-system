@@ -12,10 +12,8 @@ from types import MappingProxyType
 from typing import Mapping
 
 from python_configuration_system.runtime import ResolvedConfig
-from python_configuration_system.types import FieldName
-from python_configuration_system.types import SourceName
-from python_configuration_system.validate import ValidationReport
-from python_configuration_system.validate import ValidationSeverity
+from python_configuration_system.types import FieldName, SourceName
+from python_configuration_system.validate import ValidationReport, ValidationSeverity
 
 
 class DiagnosticsMode(StrEnum):
@@ -133,7 +131,10 @@ class ConfigurationSummary:
         ...     field_origins={},
         ...     applied_defaults=(),
         ...     secret_fields={},
-        ...     validation_statistics=ValidationStatistics(total_issues=0, error_count=0),
+        ...     validation_statistics=ValidationStatistics(
+        ...         total_issues=0,
+        ...         error_count=0,
+        ...     ),
         ...     runtime_metadata={"loaded_field_count": "1"},
         ...     lines=("Schema: service",),
         ... )
@@ -366,7 +367,9 @@ class DiagnosticsFormatter:
         if not resolved_config.applied_defaults:
             return ("  none",)
 
-        return tuple(f"  {field_name}" for field_name in resolved_config.applied_defaults)
+        return tuple(
+            f"  {field_name}" for field_name in resolved_config.applied_defaults
+        )
 
     def _format_secret_fields(
         self,

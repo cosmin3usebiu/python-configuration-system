@@ -4,15 +4,17 @@ This module exposes the stable public object model for the repository.
 Operational behavior is intentionally deferred to later milestones.
 """
 
-from python_configuration_system import errors
-from python_configuration_system import diagnostics
-from python_configuration_system import fields
-from python_configuration_system import loader
-from python_configuration_system import profiles
-from python_configuration_system import runtime
-from python_configuration_system import schema
-from python_configuration_system import sources
-from python_configuration_system import validate
+from python_configuration_system import (
+    diagnostics,
+    errors,
+    fields,
+    loader,
+    profiles,
+    runtime,
+    schema,
+    sources,
+    validate,
+)
 
 ConfigurationError = errors.ConfigurationError
 MergeConflictError = errors.MergeConflictError

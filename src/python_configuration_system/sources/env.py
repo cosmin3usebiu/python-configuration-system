@@ -5,12 +5,13 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
-from python_configuration_system.sources.base import ConfigSource
-from python_configuration_system.sources.base import SourceDiscovery
-from python_configuration_system.sources.base import SourceMetadata
-from python_configuration_system.sources.base import SourcePayload
-from python_configuration_system.types import ProfileName
-from python_configuration_system.types import SourceName
+from python_configuration_system.sources.base import (
+    ConfigSource,
+    SourceDiscovery,
+    SourceMetadata,
+    SourcePayload,
+)
+from python_configuration_system.types import ProfileName, SourceName
 
 
 @dataclass(slots=True, frozen=True)

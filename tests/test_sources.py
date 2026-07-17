@@ -7,11 +7,13 @@ from pathlib import Path
 
 import pytest
 
-from python_configuration_system import EnvConfigSource
-from python_configuration_system import FileConfigSource
-from python_configuration_system import SourceLoadError
-from python_configuration_system import SourceRegistrationError
-from python_configuration_system import SourceRegistry
+from python_configuration_system import (
+    EnvConfigSource,
+    FileConfigSource,
+    SourceLoadError,
+    SourceRegistrationError,
+    SourceRegistry,
+)
 
 
 def test_environment_source_discovers_matching_variables(

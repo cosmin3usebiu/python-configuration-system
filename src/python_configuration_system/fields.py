@@ -13,9 +13,7 @@ from typing import Any, Mapping
 
 from python_configuration_system.errors import SchemaDefinitionError
 from python_configuration_system.paths import PathRules
-from python_configuration_system.types import ConfigValue
-from python_configuration_system.types import FieldName
-from python_configuration_system.types import FieldRuntimeType
+from python_configuration_system.types import ConfigValue, FieldName, FieldRuntimeType
 
 
 class UnsetDefault:
@@ -77,19 +75,22 @@ class ConfigField:
 
         if self.required and self.has_default:
             raise SchemaDefinitionError(
-                f"Configuration field '{self.name}' cannot be required and define a default."
+                f"Configuration field '{self.name}' cannot be required and "
+                "define a default."
             )
 
         if self.default is None and not self.allow_none:
             raise SchemaDefinitionError(
-                f"Configuration field '{self.name}' uses a None default but allow_none is False."
+                f"Configuration field '{self.name}' uses a None default but "
+                "allow_none is False."
             )
 
         if self.environment_variable is not None:
             normalized_environment_variable = self.environment_variable.strip()
             if not normalized_environment_variable:
                 raise SchemaDefinitionError(
-                    f"Configuration field '{self.name}' has an empty environment variable name."
+                    f"Configuration field '{self.name}' has an empty "
+                    "environment variable name."
                 )
             object.__setattr__(
                 self,

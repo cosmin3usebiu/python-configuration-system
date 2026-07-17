@@ -4,13 +4,17 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-from python_configuration_system.diagnostics import ConfigurationSummary
-from python_configuration_system.diagnostics import DiagnosticsFormatter
-from python_configuration_system.diagnostics import DiagnosticsMode
+from python_configuration_system.diagnostics import (
+    ConfigurationSummary,
+    DiagnosticsFormatter,
+    DiagnosticsMode,
+)
 from python_configuration_system.runtime import ResolvedConfig
-from python_configuration_system.validate import ValidationIssue
-from python_configuration_system.validate import ValidationReport
-from python_configuration_system.validate import ValidationSeverity
+from python_configuration_system.validate import (
+    ValidationIssue,
+    ValidationReport,
+    ValidationSeverity,
+)
 
 
 def build_validation_report() -> ValidationReport:

@@ -10,9 +10,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from types import MappingProxyType
 
-from python_configuration_system.types import ConfigMapping
-from python_configuration_system.types import ProfileName
-from python_configuration_system.types import SourceName
+from python_configuration_system.types import ConfigMapping, ProfileName, SourceName
 
 
 @dataclass(slots=True, frozen=True)

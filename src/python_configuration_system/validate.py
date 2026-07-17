@@ -12,15 +12,15 @@ from enum import StrEnum
 from pathlib import Path
 from types import MappingProxyType
 
-from python_configuration_system.fields import ConfigField
-from python_configuration_system.fields import PathField
-from python_configuration_system.fields import UNSET
+from python_configuration_system.fields import UNSET, ConfigField, PathField
 from python_configuration_system.merge import MergeResult
 from python_configuration_system.schema import ConfigSchema
-from python_configuration_system.types import ConfigMapping
-from python_configuration_system.types import ConfigValue
-from python_configuration_system.types import FieldName
-from python_configuration_system.types import SourceName
+from python_configuration_system.types import (
+    ConfigMapping,
+    ConfigValue,
+    FieldName,
+    SourceName,
+)
 
 
 class ValidationSeverity(StrEnum):
@@ -204,7 +204,10 @@ class ConfigValidator:
         ...         field_origins={"service_name": "file"},
         ...     ),
         ... )
-        >>> report = ConfigValidator().validate(schema=schema, merge_result=merge_result)
+        >>> report = ConfigValidator().validate(
+        ...     schema=schema,
+        ...     merge_result=merge_result,
+        ... )
         >>> report.values["service_name"]
         'demo'
     """
@@ -240,7 +243,8 @@ class ConfigValidator:
                     ValidationIssue(
                         field_name=field_name,
                         code="unknown_field",
-                        message=f"Unknown field '{field_name}' is not defined by the schema.",
+                        message=f"Unknown field '{field_name}' is not defined "
+                        "by the schema.",
                     )
                 )
 

@@ -14,11 +14,13 @@ from typing import Mapping, Sequence
 
 from python_configuration_system.errors import MergeConflictError
 from python_configuration_system.sources.base import SourcePayload
-from python_configuration_system.types import ConfigMapping
-from python_configuration_system.types import ConfigValue
-from python_configuration_system.types import FieldName
-from python_configuration_system.types import ProfileName
-from python_configuration_system.types import SourceName
+from python_configuration_system.types import (
+    ConfigMapping,
+    ConfigValue,
+    FieldName,
+    ProfileName,
+    SourceName,
+)
 
 
 @dataclass(slots=True, frozen=True)
@@ -47,7 +49,9 @@ class MergeInput:
     Example:
         >>> from python_configuration_system.sources.base import SourcePayload
         >>> merge_input = MergeInput(
-        ...     payloads=[SourcePayload(source_name="env", data={"service_name": "demo"})],
+        ...     payloads=[
+        ...         SourcePayload(source_name="env", data={"service_name": "demo"}),
+        ...     ],
         ... )
         >>> len(merge_input.payloads)
         1
@@ -455,7 +459,10 @@ class ConfigMerger:
         >>> merge_result = merger.merge(
         ...     MergeInput(
         ...         payloads=[
-        ...             SourcePayload(source_name="file", data={"service_name": "demo"}),
+        ...             SourcePayload(
+        ...                 source_name="file",
+        ...                 data={"service_name": "demo"},
+        ...             ),
         ...             SourcePayload(source_name="env", data={"service_name": "prod"}),
         ...         ],
         ...     )

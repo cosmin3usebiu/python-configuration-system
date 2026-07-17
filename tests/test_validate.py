@@ -5,15 +5,15 @@ from __future__ import annotations
 from pathlib import Path
 from types import MappingProxyType
 
-from python_configuration_system.fields import IntegerField
-from python_configuration_system.fields import PathField
-from python_configuration_system.fields import SecretField
-from python_configuration_system.fields import StringField
-from python_configuration_system.merge import MergeDiagnostics
-from python_configuration_system.merge import MergeResult
+from python_configuration_system.fields import (
+    IntegerField,
+    PathField,
+    SecretField,
+    StringField,
+)
+from python_configuration_system.merge import MergeDiagnostics, MergeResult
 from python_configuration_system.schema import ConfigSchema
-from python_configuration_system.validate import ConfigValidator
-from python_configuration_system.validate import ValidationSeverity
+from python_configuration_system.validate import ConfigValidator, ValidationSeverity
 
 
 def build_merge_result(values: dict[str, object]) -> MergeResult:

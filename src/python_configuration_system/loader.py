@@ -13,8 +13,7 @@ from python_configuration_system.profiles import ConfigProfile
 from python_configuration_system.runtime import ResolvedConfig
 from python_configuration_system.schema import ConfigSchema
 from python_configuration_system.sources.base import ConfigSource
-from python_configuration_system.types import ConfigMapping
-from python_configuration_system.types import ProfileName
+from python_configuration_system.types import ConfigMapping, ProfileName
 
 
 @dataclass(slots=True)
