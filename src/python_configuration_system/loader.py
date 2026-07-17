@@ -9,11 +9,15 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Mapping, Sequence
 
+from python_configuration_system.errors import ProfileResolutionError, ValidationError
+from python_configuration_system.merge import ConfigMerger, MergeInput
 from python_configuration_system.profiles import ConfigProfile
 from python_configuration_system.runtime import ResolvedConfig
 from python_configuration_system.schema import ConfigSchema
-from python_configuration_system.sources.base import ConfigSource
+from python_configuration_system.sources.base import ConfigSource, SourcePayload
+from python_configuration_system.sources.registry import SourceRegistry
 from python_configuration_system.types import ConfigMapping, ProfileName
+from python_configuration_system.validate import ConfigValidator, ValidationSeverity
 
 
 @dataclass(slots=True)
@@ -26,9 +30,9 @@ class ConfigLoader:
         profiles: Optional profile registry keyed by profile name.
 
     Usage Notes:
-        This loader is intentionally non-operational during Milestone 2. The
-        interface is established now so later milestones can implement behavior
-        without redesigning the public API.
+        This loader is intentionally limited to orchestration. Source loading,
+        merge behavior, validation, and runtime projection remain owned by
+        their dedicated modules.
     """
 
     schema: ConfigSchema
@@ -48,10 +52,76 @@ class ConfigLoader:
             overrides: Optional explicit runtime overrides.
 
         Returns:
-            A future immutable runtime configuration object.
+            An immutable runtime configuration object.
 
         Raises:
-            NotImplementedError: Always raised during Milestone 2.
+            ProfileResolutionError: If a requested profile is unknown or uses
+                unsupported inheritance.
+            ValidationError: If schema validation reports error-severity issues.
         """
 
-        raise NotImplementedError("Configuration resolution is not implemented yet.")
+        resolved_profile_name = self._resolve_profile_name(profile_name)
+        payloads = list(
+            SourceRegistry(self.sources).load(profile_name=resolved_profile_name)
+        )
+
+        if overrides is not None:
+            payloads.append(
+                SourcePayload(
+                    source_name="overrides",
+                    data=dict(overrides),
+                    description="Explicit runtime overrides",
+                )
+            )
+
+        merge_result = ConfigMerger().merge(
+            MergeInput(
+                payloads=tuple(payloads),
+                profile_name=resolved_profile_name,
+            )
+        )
+        validation_report = ConfigValidator().validate(
+            schema=self.schema,
+            merge_result=merge_result,
+        )
+
+        error_issues = tuple(
+            issue
+            for issue in validation_report.issues
+            if issue.severity == ValidationSeverity.ERROR
+        )
+        if error_issues:
+            issue_summary = ", ".join(
+                f"{issue.code}:{issue.field_name}" for issue in error_issues
+            )
+            raise ValidationError(
+                "Configuration validation failed with "
+                f"{len(error_issues)} error(s): {issue_summary}."
+            )
+
+        return ResolvedConfig.from_validation_report(
+            validation_report=validation_report,
+            profile_name=resolved_profile_name,
+        )
+
+    def _resolve_profile_name(
+        self,
+        profile_name: ProfileName | None,
+    ) -> ProfileName | None:
+        """Validate the requested profile and return the resolved profile name."""
+        if profile_name is None:
+            return None
+
+        profile = self.profiles.get(profile_name)
+        if profile is None:
+            raise ProfileResolutionError(
+                f"Configuration profile '{profile_name}' is not registered."
+            )
+
+        if profile.extends is not None:
+            raise ProfileResolutionError(
+                "Configuration profile inheritance is not implemented for "
+                f"profile '{profile_name}'."
+            )
+
+        return profile.name
