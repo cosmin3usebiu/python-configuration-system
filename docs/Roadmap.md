@@ -1,6 +1,24 @@
 # Roadmap
 
-- `v0.1.0`: Minimal Working Version
-- `v0.5.0`: Feature Complete
-- `v0.9.0`: Release Candidate
-- `v1.0.0`: Stable Public Release
+R001 is currently undergoing documentation and governance remediation.
+
+## Current Position
+
+- Configuration behavior has been implemented through loader orchestration.
+- The prior `ConfigLoader.resolve()` blocker has been remediated.
+- Public exports have received a disposition review.
+- Documentation is being updated to match implementation state.
+
+## Future Governance Work
+
+Future bounded tasks are still required before approval, API freeze, Release
+Phase assignment, build validation, or release-candidate status.
+
+Possible future tasks include:
+
+- project tracking update;
+- build, sdist, and wheel validation;
+- final public API freeze review;
+- release-sprint decision if approved later.
+
+No version milestone in this document declares release readiness.

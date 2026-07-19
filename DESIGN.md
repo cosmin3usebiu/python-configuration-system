@@ -2,16 +2,23 @@
 
 ## Status
 
-This is a recovered draft proposal based on observed implementation evidence.
-It does not approve or freeze R001.
+This document reflects the current implemented R001 architecture after the
+minimal `ConfigLoader.resolve()` implementation.
 
-R001 approval/freeze state remains unverified. The API is not frozen. Release Phase is not assigned.
+It does not approve R001, freeze the architecture, freeze the API, assign
+Release Phase, declare release readiness, validate build artifacts, or declare
+package publication readiness.
 
-This design is not yet approved.
+Current governance status:
+
+- R001 is not approved.
+- R001 architecture is not frozen.
+- R001 API is not frozen.
+- R001 is not in Release Phase.
 
 ## Purpose
 
-Provide a reusable Python configuration system with typed schemas, source
+R001 provides a reusable Python configuration system with typed schemas, source
 loading, deterministic merging, validation, immutable runtime access, and
 diagnostic summaries.
 
@@ -29,9 +36,10 @@ R001 owns:
 - Validation against schema.
 - Default value application.
 - Unknown field reporting.
-- Secret-safe validation issues.
+- Secret-safe validation issues and diagnostics.
 - Immutable runtime configuration views.
 - Diagnostics presentation.
+- High-level loader orchestration.
 
 ## Non-Goals
 
@@ -45,8 +53,13 @@ R001 does not own:
 - Strategy logic.
 - Credential storage.
 - Secret value display.
-- Database management.
+- Database-backed configuration.
+- Remote/cloud configuration loading.
+- Live reload or file watching.
 - CLI behavior unless separately approved.
+- YAML or TOML parsing.
+- Profile inheritance.
+- Profile-specific file loading behavior.
 
 ## Architecture Boundaries
 
@@ -81,44 +94,110 @@ Orchestration layer:
 
 - `loader.py`
 
+The intended dependency direction is:
+
+```text
+Fields
+  -> Schema
+  -> Sources and Registry
+  -> Merge
+  -> Validation
+  -> Runtime
+  -> Diagnostics
+  -> Loader Orchestration
+```
+
+Lower-level modules should not depend on downstream repositories or higher
+application domains.
+
+## Loader Orchestration
+
+`ConfigLoader.resolve()` is implemented as minimal orchestration.
+
+It coordinates:
+
+1. Profile name validation.
+2. Source loading through `SourceRegistry`.
+3. Optional override payload creation.
+4. Deterministic merge through `ConfigMerger`.
+5. Schema validation through `ConfigValidator`.
+6. Runtime projection through `ResolvedConfig.from_validation_report(...)`.
+
+The loader does not own source discovery logic, source loading behavior, merge
+policy, schema validation rules, runtime lookup behavior, or diagnostics
+formatting.
+
+## Profile Semantics
+
+`ConfigProfile` is public but explicitly non-frozen and deferred.
+
+Currently supported:
+
+- Named profile metadata.
+- Optional profile description.
+- Registration lookup by `ConfigLoader.resolve(profile_name=...)`.
+- Passing the resolved profile name to sources.
+
+Currently unsupported:
+
+- Profile inheritance through `extends`.
+- Profile-specific file behavior through `file_name`.
+- Profile composition or profile-specific source policy.
+
+If `ConfigProfile.extends` is set for a requested profile,
+`ConfigLoader.resolve()` raises `ProfileResolutionError`.
+
+## Source Responsibilities
+
+Sources own only raw configuration acquisition:
+
+- discover available input;
+- load raw values;
+- return immutable source payload metadata.
+
+Sources must not validate schema correctness, apply merge precedence, interpret
+profiles beyond source-local loading behavior, or produce runtime objects.
+
+## Validation Responsibilities
+
+Validation owns schema correctness:
+
+- required field checks;
+- default application;
+- type compatibility checks;
+- unknown field reporting;
+- secret-safe issue reporting;
+- immutable validation output.
+
+Validation does not perform runtime lookup, diagnostics formatting, source
+loading, or merge precedence decisions.
+
+## Runtime Responsibilities
+
+`ResolvedConfig` owns immutable access to already validated configuration.
+
+It provides mapping access, iteration, membership checks, `get()`, `require()`,
+and attribute-style access. It must not perform loading, merging, validation,
+or diagnostics formatting.
+
+## Diagnostics Responsibilities
+
+Diagnostics present structural summaries of resolved configuration and
+validation output. Diagnostics must not expose secret values.
+
 ## Dependency Policy
 
-R001 has no runtime package dependencies.
-
-R001 must remain independent of downstream repositories. Downstream repository
-needs must not silently redefine R001 architecture, public API, or scope.
+R001 has no runtime package dependencies. It must remain independent of all
+downstream repositories. Downstream repository needs must not silently redefine
+R001 architecture, public API, or scope.
 
 ## Public / Private Module Boundary
 
-The package root exports observed public objects. Exported objects are
-implementation evidence, not a frozen public contract, until `API.md` is
-reviewed and approved.
-
+Package-root exports are current public API candidates, not frozen contracts.
 Internal helper functions and non-exported types remain implementation details.
-
-## Validation Expectations
-
-Validation should be schema-driven, deterministic, and secret-safe. Validation
-must not expose secret values in issues, diagnostics, exceptions, or other
-public reporting surfaces.
-
-## Error-Handling Expectations
-
-Repository-native exceptions derive from `ConfigurationError`.
-
-Source, schema, merge, profile, and validation failures should use explicit
-exception types.
-
-## Known Incomplete Capabilities
-
-`ConfigLoader.resolve()` is incomplete and raises `NotImplementedError`.
-
-High-level end-to-end loader orchestration is incomplete.
 
 ## Evidence Limitations
 
-This design is recovered from observed source, tests, metadata, and stale
-documentation. Source and tests are evidence of implementation, not approval.
-
-This document does not approve R001, freeze R001, freeze the API, assign Release
-Phase, approve milestones, or declare release readiness.
+Source, tests, CI history, and validation evidence demonstrate implementation
+state only. They do not approve R001, freeze R001, freeze the API, assign
+Release Phase, approve release readiness, or validate package publication.

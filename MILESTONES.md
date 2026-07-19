@@ -2,17 +2,19 @@
 
 ## Status
 
-This is a recovered draft proposal based on observed implementation evidence.
-It does not approve or freeze R001.
+This document summarizes observed R001 implementation state. It does not
+approve milestones, freeze architecture, freeze the API, assign Release Phase,
+declare release readiness, validate build artifacts, or declare package
+publication readiness.
 
-R001 approval/freeze state remains unverified. The API is not frozen. Release Phase is not assigned.
+Current governance status:
 
-Milestone approval is not granted by this file. Observed code and tests are
-evidence only.
+- R001 is not approved.
+- R001 architecture is not frozen.
+- R001 API is not frozen.
+- R001 is not in Release Phase.
 
-No milestone is approved or frozen by this file.
-
-## Proposed Milestone 1: Repository Skeleton
+## Observed Milestone 1: Repository Skeleton
 
 Observed evidence:
 
@@ -22,18 +24,12 @@ Observed evidence:
 - Source and test package layout.
 - `py.typed`.
 
-Acceptance criteria:
-
-- Package is importable.
-- Standard repository structure is present.
-- No behavior is required.
-
 Status:
 
-- Appears implemented based on observed files.
-- Not approved.
+- Implemented based on observed repository contents.
+- Not approved or frozen by this document.
 
-## Proposed Milestone 2: Core Schema and Field Model
+## Observed Milestone 2: Core Schema and Field Model
 
 Observed evidence:
 
@@ -49,20 +45,12 @@ Observed evidence:
 - `ConfigSchema`
 - Schema and field tests.
 
-Acceptance criteria:
-
-- Immutable field definitions.
-- Duplicate field rejection.
-- Required/default invariants.
-- Secret metadata.
-- Path metadata.
-
 Status:
 
-- Appears implemented based on observed source/tests.
-- Not approved.
+- Implemented based on observed source and tests.
+- Not approved or frozen by this document.
 
-## Proposed Milestone 3: Configuration Sources
+## Observed Milestone 3: Configuration Sources
 
 Observed evidence:
 
@@ -70,21 +58,17 @@ Observed evidence:
 - `EnvConfigSource`
 - `FileConfigSource`
 - `SourceRegistry`
+- `SourceMetadata`
+- `SourceDiscovery`
+- `SourcePayload`
 - Source tests.
-
-Acceptance criteria:
-
-- Environment discovery and loading.
-- JSON mapping file loading.
-- Source metadata.
-- Duplicate source rejection.
 
 Status:
 
-- Appears implemented based on observed source/tests.
-- Not approved.
+- Implemented based on observed source and tests.
+- Not approved or frozen by this document.
 
-## Proposed Milestone 4: Merge Engine
+## Observed Milestone 4: Merge Engine
 
 Observed evidence:
 
@@ -96,19 +80,12 @@ Observed evidence:
 - `StrictConflictMergeStrategy`
 - Merge tests.
 
-Acceptance criteria:
-
-- Deterministic precedence.
-- Immutable merge result.
-- Conflict diagnostics.
-- Unknown fields preserved for validation.
-
 Status:
 
-- Appears implemented based on observed source/tests.
-- Not approved.
+- Implemented based on observed source and tests.
+- Not approved or frozen by this document.
 
-## Proposed Milestone 5: Validation Engine
+## Observed Milestone 5: Validation Engine
 
 Observed evidence:
 
@@ -118,41 +95,24 @@ Observed evidence:
 - `ValidationSeverity`
 - Validation tests.
 
-Acceptance criteria:
-
-- Required field validation.
-- Default application.
-- Type compatibility checks.
-- Unknown field reporting.
-- Secret-safe issue messages.
-
 Status:
 
-- Appears implemented based on observed source/tests.
-- Not approved.
+- Implemented based on observed source and tests.
+- Not approved or frozen by this document.
 
-## Proposed Milestone 6: Runtime Object
+## Observed Milestone 6: Runtime Object
 
 Observed evidence:
 
 - `ResolvedConfig`
 - Runtime tests.
 
-Acceptance criteria:
-
-- Immutable runtime values.
-- Mapping access.
-- Attribute access.
-- `get()`.
-- `require()`.
-- Metadata from validation report.
-
 Status:
 
-- Appears implemented based on observed source/tests.
-- Not approved.
+- Implemented based on observed source and tests.
+- Not approved or frozen by this document.
 
-## Proposed Milestone 7: Diagnostics
+## Observed Milestone 7: Diagnostics
 
 Observed evidence:
 
@@ -161,45 +121,47 @@ Observed evidence:
 - `ValidationStatistics`
 - Diagnostics tests.
 
-Acceptance criteria:
-
-- Quiet summary.
-- Verbose summary.
-- Source/default/statistics metadata.
-- Secret redaction.
-
 Status:
 
-- Appears implemented based on observed source/tests.
-- Not approved.
+- Implemented based on observed source and tests.
+- Not approved or frozen by this document.
 
-## Proposed Milestone 8: Loader Orchestration
+## Observed Milestone 8: Loader Orchestration
 
 Observed evidence:
 
-- `ConfigLoader` exists.
-- `ConfigLoader.resolve()` raises `NotImplementedError`.
+- `ConfigLoader`
+- `ConfigLoader.resolve()`
+- Loader tests.
 
-Acceptance criteria:
+Implemented `ConfigLoader.resolve()` behavior:
 
-- End-to-end source loading.
-- Deterministic merge orchestration.
-- Validation orchestration.
-- Runtime object creation.
-- Profile and override handling if approved.
+- Validates requested profile names.
+- Rejects unknown profiles with `ProfileResolutionError`.
+- Rejects profile inheritance with `ProfileResolutionError`.
+- Loads source payloads through `SourceRegistry`.
+- Passes profile names through to sources.
+- Applies explicit overrides as highest precedence.
+- Merges payloads through `ConfigMerger` and `MergeInput`.
+- Validates through `ConfigValidator`.
+- Raises `ValidationError` on error-severity validation issues.
+- Returns `ResolvedConfig` on success.
 
 Status:
 
-- Incomplete.
-- `ConfigLoader.resolve()` raises `NotImplementedError`.
-- Not approved.
+- The prior `NotImplementedError` blocker has been remediated.
+- Implemented based on observed source and tests.
+- Not approved or frozen by this document.
 
-## Recovery Status
+## Current Documentation Remediation
 
-Proposed milestones 1-7 appear implemented based on observed source/tests but
-are not approved.
+This documentation update removes obsolete skeleton-only and incomplete-loader
+statements. It does not approve R001, freeze the API, assign Release Phase,
+validate package builds, or declare release readiness.
 
-Proposed milestone 8 is incomplete because `ConfigLoader.resolve()` raises
-`NotImplementedError`.
+## Remaining Governance Work
 
-No milestone is approved or frozen by this file.
+Future bounded tasks remain required before any approval, API freeze, Release
+Phase assignment, or release-candidate claim. Expected future work includes
+project tracking updates, build/package validation, and explicit approval/API
+freeze review.
